@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.0
+
+- Security & transparency audit: added `SECURITY.md` detailing all network, filesystem, and external process operations.
+- Automated CI testing: syntax validation and VLC scan-phase environment verification.
+- Release automation: automated distribution packaging with SHA-256 integrity checksums.
+- Improved error handling and playlist description formatting.
+
 ## 2.1.0
 
 - Improvements:
