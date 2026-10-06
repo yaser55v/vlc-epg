@@ -310,18 +310,23 @@ local function parse_m3u_stream(s)
         local u = get_attr(line, "url%-tvg")
                or get_attr(line, "x%-tvg%-url")
                or get_attr(line, "tvg%-url")
-        if u and u ~= "" then header_epg = trim(u:match("^[^,]+")) end
+        if u and u ~= "" then
+          local cand = trim(u:match("^[^,]+") or "")
+          if cand:match("^https?://") then
+            header_epg = cand
+          end
+        end
       elseif line:sub(1, 8) == "#EXTINF:" then
-        local info = line:sub(9)
-        local after = info:match('^.*"()') or 1
-        local comma = info:find(",", after, true)
-        local name = comma and trim(info:sub(comma + 1)) or ""
-        local tvg_name = get_attr(info, "tvg%-name") or ""
+        local extinf = line:sub(9)
+        local after = extinf:match('^.*"()') or 1
+        local comma = extinf:find(",", after, true)
+        local name = comma and trim(extinf:sub(comma + 1)) or ""
+        local tvg_name = get_attr(extinf, "tvg%-name") or ""
         if name == "" then name = tvg_name end
         pending = {
           name = decode_text(name),
-          tvg_id = trim(get_attr(info, "tvg%-id") or ""),
-          group = trim(get_attr(info, "group%-title") or ""),
+          tvg_id = trim(get_attr(extinf, "tvg%-id") or ""),
+          group = trim(get_attr(extinf, "group%-title") or ""),
         }
       elseif line:sub(1, 8) == "#EXTGRP:" then
         if pending and pending.group == "" then

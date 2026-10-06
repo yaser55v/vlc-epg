@@ -2,57 +2,60 @@
 
 ## Is This Safe to Install?
 
-**Yes.** Here is exactly what this project is and what it does.
+`vlc_epg.lua` is a single plain-text Lua script. You can read every line before installing.
+There is no binary, no compiled code and no telemetry.
 
-`vlc_epg.lua` is a **single plain-text Lua script** (~1 000 lines). There is no
-installer, no binary, no compiled code, and no dependency to download. You can
-open the file in any text editor and read every line before you copy it anywhere.
+### What it does
 
-### What the script does
+- Requests the M3U and XMLTV addresses you enter. If the guide field is empty it uses the guide
+  address declared in your playlist header (only http and https addresses are accepted).
+- Reads the local files you point it at.
+- For compressed guides and some HTTPS sources it runs `curl` and `gzip` (and `cp` for local files)
+  on your computer.
+- Writes its settings, a guide cache and temporary download files to VLC's user data folder.
+- Replaces VLC's current playlist when you press Load.
 
-| Action | Detail |
-| ------ | ------ |
-| Reads the M3U and XMLTV URLs **you provide** | No URL is hardcoded. The script only contacts addresses you type in yourself. |
-| Makes HTTP requests to those two addresses | To download your playlist and TV guide. Nothing else. |
-| Writes two files to VLC's user-data folder | `vlc_epg.cfg` (your settings) and `vlc_epg_cache.txt` (parsed guide cache). |
-| Runs entirely inside VLC's Lua sandbox | VLC's sandbox limits what a Lua extension can do. It cannot launch processes, read arbitrary files, or access the OS outside what VLC exposes. |
+### What it does NOT do
 
-### What the script does NOT do
+- ❌ No telemetry, tracking, or analytics of any kind
+- ❌ No contact with any hardcoded server
+- ❌ No background processes, no auto-start, and no starting by itself
+- ❌ Does not send your data anywhere
 
-- ❌ No telemetry, analytics, or tracking of any kind
-- ❌ No network requests to any server you did not configure
-- ❌ No access to your files outside VLC's data folder
-- ❌ No background processes, no auto-start, no system-level changes
-- ❌ No binaries, no compiled code, no native extensions
+### Important note on VLC extensions
+
+VLC does not sandbox Lua extensions. Like any program, an extension runs with your
+user's permissions, so install extensions only from sources you trust or have read.
 
 ### Where your data is stored
 
-The two files written by the script live in VLC's own data folder:
+The files written by the script live in VLC's own user data folder:
 
 | System  | Path |
 | ------- | ---- |
 | macOS   | `~/Library/Application Support/org.videolan.vlc/` |
-| Windows | `%APPDATA%\vlc\` |
+| Windows | `%APPDATA%\\vlc\\` |
 | Linux   | `~/.local/share/vlc/` |
 
-These files may contain your M3U or XMLTV URLs. Do not share them publicly.
-To remove all traces of the extension, delete `vlc_epg.cfg` and `vlc_epg_cache.txt`
-from that folder, then delete `vlc_epg.lua` from the extensions subfolder.
+Files created:
+- `vlc_epg.cfg` (your saved addresses and display preferences)
+- `vlc_epg_cache.txt` (local parsed guide cache)
+- `vlc_epg_download.tmp` / `vlc_epg_download.xml` (temporary files during download)
+
+These files may contain your private M3U or XMLTV URLs. Do not share them publicly.
+To remove all traces of the extension, delete these files or use `install.sh --uninstall --purge` (on Windows, `.\install.ps1 -Uninstall -Purge`).
 
 ### Verifying the download
 
-Every [release](../../releases/latest) includes a `vlc_epg.lua.sha256` checksum file.
-After downloading, you can verify the file has not been modified:
+Each release includes `vlc_epg.lua.sha256` so you can verify your download has not been modified:
 
-\`\`\`bash
+```bash
 # macOS / Linux
 shasum -a 256 -c vlc_epg.lua.sha256
 
 # Windows (PowerShell)
 Get-FileHash vlc_epg.lua -Algorithm SHA256
-\`\`\`
-
-The hash should match the one published on the release page.
+```
 
 ---
 

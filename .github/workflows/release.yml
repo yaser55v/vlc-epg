@@ -14,14 +14,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Lua 5.1
-        run: sudo apt-get update && sudo apt-get install -y lua5.1
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y lua5.1 shellcheck
 
-      - name: Syntax check
+      - name: Lua syntax check
         run: luac5.1 -p vlc_epg.lua
 
       - name: Scan-phase check (no standard library at top level)
         run: lua5.1 tests/scan_phase.lua vlc_epg.lua
+
+      - name: Lint and test the installer
+        run: |
+          shellcheck -s sh install.sh tests/test_install.sh
+          sh tests/test_install.sh vlc_epg.lua
 
       - name: Check that the tag matches the version in the script
         run: |
@@ -33,17 +38,19 @@ jobs:
       - name: Package
         run: |
           mkdir dist
-          cp vlc_epg.lua LICENSE dist/
-          cd dist && zip "../vlc-epg-${GITHUB_REF_NAME}.zip" vlc_epg.lua LICENSE
-
-      - name: Generate SHA-256 checksum
-        run: shasum -a 256 vlc_epg.lua > vlc_epg.lua.sha256
+          cp vlc_epg.lua install.sh install.ps1 LICENSE dist/
+          # Point the installers at this repository.
+          sed -i "s#OWNER/REPO#${GITHUB_REPOSITORY}#g" dist/install.sh dist/install.ps1
+          (cd dist && sha256sum vlc_epg.lua > vlc_epg.lua.sha256)
+          (cd dist && zip "../vlc-epg-${GITHUB_REF_NAME}.zip" vlc_epg.lua LICENSE)
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            vlc_epg.lua
-            vlc_epg.lua.sha256
+            dist/vlc_epg.lua
+            dist/vlc_epg.lua.sha256
+            dist/install.sh
+            dist/install.ps1
             vlc-epg-${{ github.ref_name }}.zip
           generate_release_notes: true

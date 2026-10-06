@@ -2,10 +2,15 @@
 
 ## 2.2.0
 
-- Security & transparency audit: added `SECURITY.md` detailing all network, filesystem, and external process operations.
-- Automated CI testing: syntax validation and VLC scan-phase environment verification.
-- Release automation: automated distribution packaging with SHA-256 integrity checksums.
-- Improved error handling and playlist description formatting.
+- New menu: choose what the Description column shows (2, 3 or 5 programs, or the next 2, 4, 8 or 12 hours). The choice is saved. In hours mode at most 10 programs are listed.
+- Genre column: category of the running program. Album column: synopsis of the running program.
+- On-screen message includes the category and a short synopsis.
+- Program titles escaped twice by a guide (for example `&amp;#039;`) are decoded correctly.
+- Safer channel matching: cleaned `tvg-id` comparison, quality words and tags ignored in names, ambiguous matches skipped. The status line shows matches by id and by name.
+- The guide address from a playlist header is only used when it is an http or https address.
+- Project renamed to VLC EPG (`vlc_epg.lua`). Settings and cache files were renamed, so enter your addresses again after updating.
+- One-line installers for macOS, Linux and Windows (Windows untested), and an uninstall option.
+- CI: syntax check, VLC scan-phase check, installer lint and tests.
 
 ## 2.1.0
 

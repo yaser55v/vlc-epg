@@ -6,13 +6,22 @@ on:
   pull_request:
 
 jobs:
-  syntax:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Lua 5.1
-        run: sudo apt-get update && sudo apt-get install -y lua5.1
-      - name: Syntax check
+
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y lua5.1 shellcheck
+
+      - name: Lua syntax check
         run: luac5.1 -p vlc_epg.lua
+
       - name: Scan-phase check (no standard library at top level)
         run: lua5.1 tests/scan_phase.lua vlc_epg.lua
+
+      - name: Lint the installer
+        run: shellcheck -s sh install.sh tests/test_install.sh
+
+      - name: Test the installer
+        run: sh tests/test_install.sh vlc_epg.lua
