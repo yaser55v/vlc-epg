@@ -1,0 +1,5 @@
+.DS_Store
+*.tmp
+iptv_guide.cfg
+iptv_guide_epg_cache.txt
+examples/test_epg.xml

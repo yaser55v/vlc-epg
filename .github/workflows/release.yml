@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lua 5.1
+        run: sudo apt-get update && sudo apt-get install -y lua5.1
+
+      - name: Syntax check
+        run: luac5.1 -p vlc_epg.lua
+
+      - name: Scan-phase check (no standard library at top level)
+        run: lua5.1 tests/scan_phase.lua vlc_epg.lua
+
+      - name: Check that the tag matches the version in the script
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          SCRIPT=$(grep -o 'version = "[0-9.]*"' vlc_epg.lua | head -1 | grep -o '[0-9.]*')
+          echo "tag=$TAG script=$SCRIPT"
+          test "$TAG" = "$SCRIPT"
+
+      - name: Package
+        run: |
+          mkdir dist
+          cp vlc_epg.lua LICENSE dist/
+          cd dist && zip "../vlc-epg-${GITHUB_REF_NAME}.zip" vlc_epg.lua LICENSE
+
+      - name: Generate SHA-256 checksum
+        run: shasum -a 256 vlc_epg.lua > vlc_epg.lua.sha256
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            vlc_epg.lua
+            vlc_epg.lua.sha256
+            vlc-epg-${{ github.ref_name }}.zip
+          generate_release_notes: true
