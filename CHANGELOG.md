@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.2.1
+
+- One-line installers for macOS, Linux and Windows (Windows untested), and an uninstall option (`--uninstall`, `--purge`).
+- CI checks: syntax check, VLC scan-phase environment check, installer lint (`shellcheck`), and automated installer tests.
+- Security hardening: the guide address from a playlist header (`url-tvg`, `x-tvg-url`, `tvg-url`) is accepted only when it starts with `http://` or `https://`.
+- Documentation: README and SECURITY.md corrections (honest disclosure that VLC does not sandbox Lua extensions and runs standard tools).
+- Official SHA-256 integrity checksum (`vlc_epg.lua.sha256`) published with the release.
+- Changed descriptor title to "VLC EPG" (removed version number from title).
+
 ## 2.2.0
 
 - New menu: choose what the Description column shows (2, 3 or 5 programs, or the next 2, 4, 8 or 12 hours). The choice is saved. In hours mode at most 10 programs are listed.
@@ -7,10 +16,7 @@
 - On-screen message includes the category and a short synopsis.
 - Program titles escaped twice by a guide (for example `&amp;#039;`) are decoded correctly.
 - Safer channel matching: cleaned `tvg-id` comparison, quality words and tags ignored in names, ambiguous matches skipped. The status line shows matches by id and by name.
-- The guide address from a playlist header is only used when it is an http or https address.
 - Project renamed to VLC EPG (`vlc_epg.lua`). Settings and cache files were renamed, so enter your addresses again after updating.
-- One-line installers for macOS, Linux and Windows (Windows untested), and an uninstall option.
-- CI: syntax check, VLC scan-phase check, installer lint and tests.
 
 ## 2.1.0
 

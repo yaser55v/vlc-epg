@@ -191,8 +191,8 @@ sh tests/test_install.sh vlc_epg.lua
 1. Update `version` in the script's `descriptor()` and add a section to `CHANGELOG.md`.
 2. Commit, then tag and push:
    ```bash
-   git tag v2.2.0
-   git push origin v2.2.0
+   git tag v2.2.1
+   git push origin v2.2.1
    ```
 
 The release workflow validates the script syntax and scan-phase, lints and tests the installer, verifies that the tag matches the script version, generates `vlc_epg.lua.sha256`, packages the zip archive, and publishes all release assets on GitHub.

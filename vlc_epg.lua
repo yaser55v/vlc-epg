@@ -997,8 +997,8 @@ end
 
 function descriptor()
   return {
-    title = "VLC EPG 2.2",
-    version = "2.2.0",
+    title = "VLC EPG",
+    version = "2.2.1",
     author = "Yasser Mahmoud",
     shortdesc = "VLC EPG",
     description = "Loads an M3U playlist and fills the playlist columns with XMLTV program info.",
