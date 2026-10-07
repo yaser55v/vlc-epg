@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="images/Logo.png" alt="VLC EPG Logo" width="128">
+</p>
+
 # VLC EPG
 
 [![Check](https://github.com/yaser55v/vlc-epg/actions/workflows/check.yml/badge.svg)](../../actions/workflows/check.yml)
@@ -16,6 +20,30 @@ Sky News         News       18:00-19:00 Sky News Tonight  ||  19:00 Politics Hub
 ```
 
 The program that is running now is shown in bold (Unicode bold letters, see [Notes](#notes)).
+
+---
+
+## Screenshots
+
+### 1. Launch the extension
+Open **VLC > Extensions > VLC EPG** (macOS) or **View > VLC EPG** (Windows / Linux):
+
+![1. Select VLC EPG in VLC Extensions](images/1.jpg)
+
+### 2. Enter playlist and guide addresses
+Provide your M3U playlist and XMLTV guide URLs or local file paths:
+
+![2. Configure URLs](images/2.jpg)
+
+### 3. Load channels into playlist
+Click **Load into playlist** to parse and match channels:
+
+![3. Load into playlist](images/3.jpg)
+
+### 4. TV guide displayed in playlist
+View running and upcoming programs directly in VLC's **Description** column:
+
+![4. EPG information display](images/4.jpg)
 
 ---
 
